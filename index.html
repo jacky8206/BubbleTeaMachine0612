@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PHOENIXES 智能奶茶機｜智能調飲吧台</title>
+  <meta name="description" content="PHOENIXES 智能奶茶機為現代飲品門市打造，整合茶湯冷藏、精準出料、電子秤校準與後台配方管理。">
+  <style>
+    :root {
+      --ink: #151311;
+      --muted: #625d55;
+      --subtle: #9a9284;
+      --paper: #f3efe7;
+      --panel: #fbf8f1;
+      --line: #d8d0c2;
+      --charcoal: #0b0a09;
+      --graphite: #171512;
+      --metal: #c0b6a4;
+      --tea: #7a5637;
+      --amber: #b08a52;
+      --white: #ffffff;
+      --max: 1240px;
+      --serif: "Times New Roman", "Noto Serif TC", "Songti TC", serif;
+      --sans: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--sans);
+      line-height: 1.62;
+      text-rendering: geometricPrecision;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px clamp(22px, 4vw, 52px);
+      color: var(--white);
+      background: linear-gradient(180deg, rgba(17,16,15,.72), rgba(17,16,15,0));
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font: 700 16px/1 var(--serif);
+    }
+
+    .brand span {
+      letter-spacing: .16em;
+      font: 500 11px/1 var(--sans);
+      opacity: .82;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 13px;
+      letter-spacing: .1em;
+    }
+
+    .nav-cta {
+      border: 1px solid rgba(255,255,255,.62);
+      padding: 9px 15px;
+      border-radius: 0;
+    }
+
+    .hero {
+      position: relative;
+      --scroll: 0;
+      min-height: 94vh;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 73% 28%, rgba(225,205,170,.28), transparent 34%),
+        linear-gradient(180deg, rgba(11,10,9,.18), rgba(11,10,9,.88)),
+        linear-gradient(112deg, #080807 0%, #17130f 48%, #897258 100%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 9vh 1vw 5vh auto;
+      width: min(56vw, 780px);
+      background: url("assets/b102-details/hero-b102-close.png") center bottom / contain no-repeat;
+      filter: drop-shadow(0 44px 72px rgba(0,0,0,.46));
+      opacity: .96;
+      transform: translate3d(0, calc(var(--scroll) * 34px), 0) scale(calc(1 + var(--scroll) * .018));
+      transition: transform 80ms linear;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 1px;
+      background: transparent;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 172px 0 104px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: rgba(255,255,255,.66);
+      font-size: 11px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 630px;
+      margin-bottom: 24px;
+      font: 400 clamp(52px, 8vw, 104px)/.9 var(--serif);
+      letter-spacing: 0;
+    }
+
+    .hero-lede {
+      max-width: 570px;
+      margin-bottom: 36px;
+      color: rgba(255,255,255,.78);
+      font-size: clamp(16px, 1.7vw, 20px);
+      line-height: 1.72;
+    }
+
+    .hero-actions,
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 11px 20px;
+      border: 1px solid currentColor;
+      border-radius: 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .button.dark {
+      color: var(--white);
+      background: var(--charcoal);
+      border-color: var(--charcoal);
+    }
+
+    .button.light {
+      color: var(--charcoal);
+      background: var(--panel);
+      border-color: var(--panel);
+    }
+
+    .button.ghost {
+      color: var(--white);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.62);
+    }
+
+    .stats {
+      position: static;
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto 56px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 0;
+      background: transparent;
+      backdrop-filter: none;
+    }
+
+    .stat {
+      min-height: auto;
+      padding: 0 28px 0 0;
+      border-right: 0;
+    }
+
+    .stat:last-child { border-right: 0; }
+
+    .stat strong {
+      display: block;
+      color: var(--ink);
+      font: 400 34px/1 var(--serif);
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 124px 0;
+    }
+
+    .section.compact {
+      padding: 86px 0 76px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      gap: clamp(44px, 7vw, 104px);
+      align-items: end;
+      margin-bottom: 56px;
+    }
+
+    .section-head > div {
+      display: grid;
+      gap: 10px;
+    }
+
+    .kicker {
+      color: var(--tea);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font: 400 clamp(38px, 5vw, 62px)/1.03 var(--serif);
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.84;
+      margin-bottom: 6px;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .value-card {
+      min-height: 178px;
+      padding: 30px 36px 32px;
+      background: var(--panel);
+    }
+
+    .value-card h3,
+    .model-card h3,
+    .detail-card h3,
+    .scene h3,
+    .faq-item h3 {
+      margin-bottom: 12px;
+      font: 400 26px/1.16 var(--serif);
+    }
+
+    .value-card p,
+    .model-card p,
+    .detail-card p,
+    .scene p,
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .feature-band {
+      background: var(--charcoal);
+      color: var(--white);
+    }
+
+    .feature-band .section-copy,
+    .feature-band .model-card p,
+    .feature-band .kicker {
+      color: rgba(255,255,255,.68);
+    }
+
+    .models {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    .model-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(360px, .85fr);
+      gap: 1px;
+      margin-bottom: 1px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.18);
+      overflow: hidden;
+    }
+
+    .stage-visual {
+      position: relative;
+      min-height: 560px;
+      background: #0f0e0d;
+      overflow: hidden;
+    }
+
+    .stage-visual::after {
+      content: "";
+      position: absolute;
+      inset: auto 9% 9%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+    }
+
+    .stage-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      transform: scale(1.015);
+      transition: transform 700ms ease, opacity 380ms ease;
+    }
+
+    .stage-visual img.switching {
+      opacity: .18;
+      transform: scale(1.045);
+    }
+
+    .stage-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      min-height: 560px;
+      padding: 48px 48px 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015)),
+        #141210;
+    }
+
+    .stage-copy .model-code {
+      margin-bottom: 34px;
+    }
+
+    .stage-copy h3 {
+      margin: 0 0 16px;
+      font: 400 clamp(34px, 4vw, 54px)/1.02 var(--serif);
+    }
+
+    .stage-copy p {
+      max-width: 460px;
+      margin: 0 0 34px;
+      color: rgba(255,255,255,.72);
+      font-size: 17px;
+      line-height: 1.82;
+    }
+
+    .stage-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.14);
+    }
+
+    .stage-specs span {
+      min-height: 76px;
+      padding: 18px;
+      color: rgba(255,255,255,.68);
+      background: rgba(255,255,255,.035);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+
+    .stage-specs b {
+      display: block;
+      color: #fff;
+      font: 400 25px/1.1 var(--serif);
+      letter-spacing: 0;
+      margin-bottom: 5px;
+    }
+
+    .model-card {
+      position: relative;
+      display: flex;
+      min-height: 560px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 26px 24px;
+      background: #141210;
+      cursor: pointer;
+      transition: background 260ms ease, transform 260ms ease, opacity 260ms ease;
+    }
+
+    .model-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid transparent;
+      pointer-events: none;
+      transition: border-color 260ms ease, box-shadow 260ms ease;
+    }
+
+    .model-card:hover,
+    .model-card.is-active {
+      background: #1d1915;
+    }
+
+    .model-card.is-active::after {
+      border-color: rgba(216,190,143,.62);
+      box-shadow: inset 0 0 0 1px rgba(216,190,143,.18);
+    }
+
+    .model-card:not(.is-active) {
+      opacity: .72;
+    }
+
+    .model-card img {
+      width: 100%;
+      height: 208px;
+      object-fit: cover;
+      margin: 18px 0 28px;
+      border: 0;
+      filter: saturate(.92) contrast(1.06);
+    }
+
+    .model-card[data-code="D102"] img {
+      object-fit: contain;
+      transform: scale(.8);
+    }
+
+    .stage-visual[data-active-code="D102"] img.is-active {
+      object-fit: contain;
+      transform: scale(.8);
+    }
+
+    .model-code {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255,255,255,.16);
+      padding-bottom: 16px;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .model-code strong {
+      color: var(--white);
+      font: 400 32px/1 var(--serif);
+      letter-spacing: 0;
+    }
+
+    .model-meta {
+      display: grid;
+      gap: 7px;
+      margin-top: 20px;
+      color: rgba(255,255,255,.74);
+      font-size: 14px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav.is-scrolled {
+      color: var(--ink);
+      background: rgba(243,239,231,.86);
+      border-bottom: 1px solid rgba(216,208,194,.7);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav.is-scrolled .nav-cta {
+      border-color: rgba(21,19,17,.42);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        transition-duration: 1ms !important;
+        animation-duration: 1ms !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 74px;
+      align-items: center;
+    }
+
+    .image-frame {
+      min-height: 620px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 48% 30%, rgba(255,244,220,.16), transparent 34%),
+        linear-gradient(180deg, #161411, #080807);
+      overflow: hidden;
+    }
+
+    .image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.95) contrast(1.08);
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .detail-card {
+      min-height: 142px;
+      padding: 24px 30px 26px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,253,248,.54);
+    }
+
+    .detail-cinema {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+      gap: 1px;
+      margin-top: 46px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.14);
+      color: #fff;
+    }
+
+    .cinema-visual {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 680px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 34%, rgba(255,244,218,.14), transparent 34%),
+        linear-gradient(180deg, #171411, #070706);
+    }
+
+    .cinema-visual::after {
+      content: "";
+      position: absolute;
+      inset: auto 12% 11%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+    }
+
+    .cinema-visual img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.08);
+      transition: opacity 620ms ease, transform 900ms cubic-bezier(.2,.7,.1,1);
+    }
+
+    .cinema-visual img.is-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .cinema-shade {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.1), transparent 38%, rgba(0,0,0,.2)),
+        linear-gradient(180deg, rgba(0,0,0,.15), transparent 28%, rgba(0,0,0,.32));
+      pointer-events: none;
+    }
+
+    .cinema-progress {
+      position: absolute;
+      left: 34px;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      gap: 12px;
+      transform: translateY(-50%);
+    }
+
+    .cinema-dot {
+      width: 7px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.34);
+      background: rgba(255,255,255,.08);
+      transition: background 260ms ease, height 260ms ease, border-color 260ms ease;
+    }
+
+    .cinema-dot.is-active {
+      height: 58px;
+      border-color: rgba(216,190,143,.72);
+      background: rgba(216,190,143,.72);
+    }
+
+    .cinema-copy {
+      background: #11100f;
+    }
+
+    .cinema-step {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 9vh clamp(34px, 5vw, 70px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+
+    .cinema-step:last-child {
+      border-bottom: 0;
+    }
+
+    .cinema-step .kicker {
+      color: rgba(216,190,143,.86);
+    }
+
+    .cinema-step h3 {
+      max-width: 470px;
+      margin: 0 0 18px;
+      font: 400 clamp(36px, 5vw, 64px)/1 var(--serif);
+    }
+
+    .cinema-step p {
+      max-width: 520px;
+      margin: 0;
+      color: rgba(255,255,255,.7);
+      font-size: 18px;
+      line-height: 1.84;
+    }
+
+    .cinema-step strong {
+      display: block;
+      margin-top: 30px;
+      color: #fff;
+      font: 400 30px/1.1 var(--serif);
+    }
+
+    .scenes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .scene {
+      min-height: 164px;
+      padding: 26px 30px 28px;
+      background: var(--panel);
+    }
+
+    .process {
+      counter-reset: step;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .step {
+      position: relative;
+      min-height: 236px;
+      padding: 68px 22px 24px;
+      background: var(--panel);
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: "0" counter(step);
+      position: absolute;
+      top: 22px;
+      left: 20px;
+      color: var(--tea);
+      font: 400 22px/1 var(--serif);
+    }
+
+    .step h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .spec-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .spec {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+      padding: 20px 24px;
+      background: var(--panel);
+      color: var(--muted);
+    }
+
+    .spec b {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .faq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .faq-item {
+      padding: 34px 32px;
+      background: var(--panel);
+    }
+
+    .cta {
+      padding: 124px 20px;
+      color: var(--white);
+      background:
+        linear-gradient(90deg, rgba(11,10,9,.97), rgba(11,10,9,.72)),
+        url("assets/b102-details/footer-cta-control-panel.png") right center / min(720px, 52vw) auto no-repeat,
+        var(--charcoal);
+    }
+
+    .cta-inner {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      max-width: 760px;
+      margin-bottom: 22px;
+    }
+
+    .cta p {
+      max-width: 620px;
+      margin-bottom: 30px;
+      color: rgba(255,255,255,.74);
+      font-size: 18px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px clamp(20px, 4vw, 46px);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1080px) {
+      .models,
+      .model-stage,
+      .scenes,
+      .process {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .model-stage {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-cinema {
+        grid-template-columns: 1fr;
+      }
+
+      .cinema-visual {
+        position: relative;
+        top: auto;
+        height: 72vh;
+        min-height: 520px;
+      }
+
+      .stats,
+      .value-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat:nth-child(2) {
+        border-right: 0;
+      }
+
+      .stat:nth-child(-n+2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-head,
+      .split {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .hero::before {
+        opacity: .3;
+        width: 78vw;
+        inset: 18vh -20vw 20vh auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        position: absolute;
+      }
+
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+
+      .hero {
+        min-height: 860px;
+      }
+
+      .hero-content {
+        padding-top: 140px;
+        padding-bottom: 74px;
+      }
+
+      .stats,
+      .value-grid,
+      .models,
+      .model-stage,
+      .details,
+      .scenes,
+      .process,
+      .spec-wrap,
+      .faq {
+        grid-template-columns: 1fr;
+      }
+
+      .stat,
+      .stat:nth-child(2),
+      .stat:last-child {
+        border-right: 0;
+        border-bottom: 0;
+      }
+
+      .section {
+        padding: 78px 0;
+      }
+
+      .image-frame {
+        min-height: 380px;
+      }
+
+      .stage-visual,
+      .stage-copy {
+        min-height: auto;
+      }
+
+      .stage-visual {
+        aspect-ratio: 4 / 3;
+      }
+
+      .stage-copy {
+        padding: 30px 24px;
+      }
+
+      .stage-specs {
+        grid-template-columns: 1fr;
+      }
+
+      .model-card {
+        min-height: auto;
+      }
+
+      .cinema-visual {
+        height: 68vh;
+        min-height: 430px;
+      }
+
+      .cinema-step {
+        min-height: auto;
+        padding: 72px 24px;
+      }
+
+      .cinema-step h3 {
+        font-size: 34px;
+      }
+
+      .cinema-step p {
+        font-size: 16px;
+      }
+
+      .cinema-progress {
+        left: 18px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  <nav class="nav is-scrolled" aria-label="主選單">
+    <a class="brand" href="#top">PHOENIXES <span>智能奶茶機</span></a>
+    <div class="nav-links">
+      <a href="#models">機型</a>
+      <a href="#craft">工藝</a>
+      <a href="#process">導入</a>
+      <a href="#specs">規格</a>
+      <a class="nav-cta" href="#contact">預約展示</a>
+    </div>
+  </nav>
+
+  <header id="top" class="hero" style="--scroll: 1.000;">
+    <div class="hero-content">
+      <p class="eyebrow">&nbsp; AI Beverage Bar System</p>
+      <h1>PHOENIXES 智能奶茶機</h1>
+      <p class="hero-lede">為現代飲品門市打造的智能調飲吧台，整合茶湯冷藏、精準出料、電子秤校準與後台配方管理，讓每一杯出品都更穩定、更高效、更容易複製。</p>
+      <div class="hero-actions">
+        <a class="button light" href="#contact">預約產品展示</a>
+        <a class="button ghost" href="#models">探索機型系列</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section compact" aria-labelledby="value-title">
+      <aside class="stats" aria-label="產品重點數據">
+        <div class="stat"><strong>100ml±2%</strong><span>出料精度</span></div>
+        <div class="stat"><strong>16</strong><span>最多茶湯盒數</span></div>
+        <div class="stat"><strong>10.1"</strong><span>智能觸控螢幕</span></div>
+        <div class="stat"><strong>5</strong><span>門市配置機型</span></div>
+      </aside>
+      <div class="section-head reveal is-visible">
+        <div>
+          <p class="kicker">&nbsp; Brand Standard</p>
+          <h2 id="value-title">讓調飲流程&nbsp;</h2><h2 id="value-title">進入穩定標準</h2>
+        </div>
+        <p class="section-copy">PHOENIXES 不只是自動化設備，而是一套面向飲品門市營運的智能出杯系統。從茶湯、糖漿、奶類到配方設定與日常清潔，設備協助門市降低人為誤差，提升尖峰時段效率，並讓每一間門市都能維持一致的出品標準。</p>
+      </div>
+      <div class="value-grid">
+        <article class="value-card reveal is-visible">
+          <h3>精準</h3>
+          <p>透過穩定出料與電子秤校準，降低人工調飲造成的杯差，讓配方執行更可控。</p>
+        </article>
+        <article class="value-card reveal is-visible">
+          <h3>高效</h3>
+          <p>將高頻原料、熱門品項與清潔流程整合，縮短門市每日操作與尖峰出杯時間。</p>
+        </article>
+        <article class="value-card reveal is-visible">
+          <h3>可複製</h3>
+          <p>後台支援配方、權限與設備資料管理，適合單店試點、連鎖展店與標準化營運。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="models" class="feature-band">
+      <div class="section">
+        <div class="section-head reveal is-visible">
+          <div>
+            <p class="kicker">&nbsp; Collection</p>
+            <h2>選擇合適配置</h2>
+          </div>
+          <p class="section-copy">PHOENIXES 提供大型標準機與中型窄機身配置，對應熱茶供應、全冷藏、多品項、高杯量與小型櫃位等不同營運場景。</p>
+        </div>
+        <div class="models">
+          <article class="model-card reveal is-visible" data-code="B102" data-label="熱茶湯" data-title="標準展示款" data-text="唯一配置熱茶桶的機型，適合需要熱茶供應、前場展示與基礎容量兼顧的門市。" data-image="assets/b102-details/b102-home-front-alpha.png" data-spec-one="8L × 4" data-spec-one-label="熱茶桶配置" data-spec-two="1500 mm" data-spec-two-label="標準大型機寬度">
+            <div>
+              <div class="model-code"><strong>B102</strong><span>熱茶湯</span></div>
+              <img src="assets/b102-details/b102-home-front-alpha.png" alt="PHOENIXES B102 智能奶茶機">
+              <h3>熱茶湯機種</h3>
+              <p>唯一配置熱茶桶的機型，適合需要熱茶供應、前場展示與基礎容量兼顧的門市。</p>
+            </div>
+            <div class="model-meta"><span>8L × 4 熱茶桶</span><span>1500 × 700 × 1480 mm</span></div>
+          </article>
+          <article class="model-card reveal is-visible" data-code="B122" data-label="全冷藏" data-title="標準店型" data-text="12 組茶湯盒，容量配置均衡，適合一般飲品店或首次導入智能調飲設備的門市。" data-image="assets/b102-details/b-series-cold-alpha.png" data-spec-one="12 組" data-spec-one-label="茶湯盒總數" data-spec-two="3L + 5L" data-spec-two-label="均衡容量配置">
+            <div>
+              <div class="model-code"><strong>B122</strong><span>全冷藏</span></div>
+              <img src="assets/b102-details/b-series-cold-alpha.png" alt="PHOENIXES B122 智能奶茶機">
+              <h3>標準店型</h3>
+              <p>12 組茶湯盒，容量配置均衡，適合一般飲品店或首次導入智能調飲設備的門市。</p>
+            </div>
+            <div class="model-meta"><span>3L × 6 + 5L × 6</span><span>標準大型機尺寸</span></div>
+          </article>
+          <article class="model-card reveal is-visible" data-code="B142" data-label="10L 大桶" data-title="大容量配置" data-text="配置 10L 大容量茶湯盒，適合熱門原料消耗快速、尖峰時段不希望頻繁補料的場域。" data-image="assets/b102-details/b-series-cold-alpha.png" data-spec-one="10L × 6" data-spec-one-label="大容量茶湯盒" data-spec-two="14 組" data-spec-two-label="茶湯盒總數">
+            <div>
+              <div class="model-code"><strong>B142</strong><span>10L 大桶</span></div>
+              <img src="assets/b102-details/b-series-cold-alpha.png" alt="PHOENIXES B142 智能奶茶機">
+              <h3>大容量配置</h3>
+              <p>配置 10L 大容量茶湯盒，適合熱門原料消耗快速、尖峰時段不希望頻繁補料的場域。</p>
+            </div>
+            <div class="model-meta"><span>3L × 8 + 10L × 6</span><span>14 組茶湯盒</span></div>
+          </article>
+          <article class="model-card reveal is-visible" data-code="B162" data-label="高容量" data-title="多品項門市" data-text="最多 16 組茶湯盒，適合高杯量、多品項與連鎖門市標準化管理。" data-image="assets/b102-details/b-series-cold-alpha.png" data-spec-one="16 組" data-spec-one-label="最多茶湯盒配置" data-spec-two="5L × 8" data-spec-two-label="中容量料盒">
+            <div>
+              <div class="model-code"><strong>B162</strong><span>高容量</span></div>
+              <img src="assets/b102-details/b-series-cold-alpha.png" alt="PHOENIXES B162 智能奶茶機">
+              <h3>多品項門市</h3>
+              <p>最多 16 組茶湯盒，適合高杯量、多品項與連鎖門市標準化管理。</p>
+            </div>
+            <div class="model-meta"><span>3L × 8 + 5L × 8</span><span>最多配置</span></div>
+          </article>
+          <article class="model-card reveal is-visible" data-code="D102" data-label="窄機身" data-title="中型機" data-text="寬度僅 600mm，適合小型店面、窄吧台、櫃位場景或試點導入。" data-image="assets/b102-details/d102-alpha.png" data-spec-one="600 mm" data-spec-one-label="窄機身寬度" data-spec-two="610W" data-spec-two-label="中型機額定功率">
+            <div>
+              <div class="model-code"><strong>D102</strong><span>窄機身</span></div>
+              <img src="assets/b102-details/d102-alpha.png" alt="PHOENIXES D102 智能奶茶機">
+              <h3>中型機</h3>
+              <p>寬度僅 600mm，適合小型店面、窄吧台、櫃位場景或試點導入。</p>
+            </div>
+            <div class="model-meta"><span>600 × 700 × 1430 mm</span><span>空間友善</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="craft" class="section">
+      <div class="split">
+        <div class="image-frame reveal is-visible">
+          <img src="assets/b102-details/craft-hero-detail.png" alt="PHOENIXES 智能奶茶機工藝細節展示">
+        </div>
+        <div>
+          <p class="kicker">&nbsp; Craft &amp; Control</p>
+          <h2>每一個細節&nbsp;</h2><h2>都為穩定出杯而設計</h2>
+          <p class="section-copy">PHOENIXES 將冷藏、出料、秤重、清潔與後台管理整合在同一設備架構中。從快拆管路、冷藏茶湯盒到電子秤校準，每個細節都服務於門市日常營運的穩定性。</p>
+        </div>
+      </div>
+      <div class="details" style="margin-top:54px">
+        <article class="detail-card reveal is-visible"><h3>冷藏茶湯管理</h3><p>依機型配置 3L、5L 或 10L 茶湯盒，支援多品項與高杯量需求。</p></article>
+        <article class="detail-card reveal is-visible"><h3>精準出料系統</h3><p>糖、果醬、茶、奶依不同流速穩定出料，出料精度達 100ml±2%。</p></article>
+        <article class="detail-card reveal is-visible"><h3>智能觸控操作</h3><p>10.1 吋 Android 觸控螢幕，整合補料、校準、清潔與設備操作。</p></article>
+        <article class="detail-card reveal is-visible"><h3>快拆管路設計</h3><p>卡扣式或旋轉式快拆接頭，提升日常維護與清潔效率。</p></article>
+        <article class="detail-card reveal is-visible"><h3>電子秤校準</h3><p>透過秤盤校準與物料校準，協助維持出杯克數穩定。</p></article>
+        <article class="detail-card reveal is-visible"><h3>後台配方管理</h3><p>支援杯型、糖量、冰塊、配方與權限設定，讓門市操作更一致。</p></article>
+      </div>
+      <div class="detail-cinema" id="detailCinema">
+        <div class="cinema-visual" aria-hidden="true">
+          <img class="" src="assets/b102-details/b102-hero-angle.png" alt="">
+          <img src="assets/b102-details/b102-touchscreen.png" alt="" class="">
+          <img src="assets/b102-details/b102-tea-urns.png" alt="" class="">
+          <img src="assets/b102-details/b102-cooling-display.png" alt="" class="">
+          <img src="assets/b102-details/b102-front.png" alt="" class="is-active">
+          <div class="cinema-shade"></div>
+          <div class="cinema-progress">
+            <span class="cinema-dot"></span>
+            <span class="cinema-dot"></span>
+            <span class="cinema-dot"></span>
+            <span class="cinema-dot"></span>
+            <span class="cinema-dot is-active"></span>
+          </div>
+        </div>
+        <div class="cinema-copy">
+          <section class="cinema-step" data-detail-step="0">
+            <p class="kicker">&nbsp;B102 Detail</p>
+            <h3>以不鏽鋼呈現專業設備質感</h3>
+            <p>B102 系列保留熱茶桶展示、前場操作檯面與下方冷藏區，讓設備在門市中同時具備視覺辨識、出杯效率與儲存管理能力。</p>
+            <strong>整合式智能奶茶機</strong>
+          </section>
+          <section class="cinema-step" data-detail-step="1">
+            <p class="kicker">&nbsp;Control Interface</p>
+            <h3>觸控螢幕&nbsp;</h3><h3>管理每日操作</h3>
+            <p>設備操作、補料、校準、清潔與配方下發集中於螢幕介面，讓門市人員能以更一致的流程完成日常作業。</p>
+          </section>
+          <section class="cinema-step" data-detail-step="2">
+            <p class="kicker">&nbsp;Tea Service</p>
+            <h3>熱茶與冷茶&nbsp;</h3><h3>機型皆備</h3>
+            <p>四組熱茶桶配置讓茶湯供應不只是後場功能，也成為門市視覺的一部分，適合重視熱飲、展示與高頻出杯的店型。</p>
+          </section>
+          <section class="cinema-step" data-detail-step="3">
+            <p class="kicker">&nbsp;Cold Storage</p>
+            <h3>冷藏額外提供備援空間</h3>
+            <p>下方冷藏冰箱與內部管路配置協助門市整理茶湯、奶類與其他高頻原料，降低補料與查找成本。</p>
+            <strong><br></strong>
+          </section>
+          <section class="cinema-step" data-detail-step="4">
+            <p class="kicker">&nbsp;Front Elevation</p>
+            <h3>設計質感</h3><h3>無縫融入門市</h3>
+            <p>不鏽鋼材質、黑色玻璃門片讓設備具備更接近精品工業產品的展示語言。</p>
+            <strong><br></strong>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact" aria-labelledby="scene-title">
+      <div class="section-head reveal is-visible">
+        <div>
+          <p class="kicker">&nbsp; Use Cases</p>
+          <h2 id="scene-title">為現代化&nbsp;</h2><h2 id="scene-title">飲品門市而生</h2>
+        </div>
+        <p class="section-copy">從標準飲品店到連鎖品牌，PHOENIXES 依據杯量、菜單結構與吧台條件，建立適合現場節奏的智能調飲配置。</p>
+      </div>
+      <div class="scenes">
+        <article class="scene reveal is-visible"><h3>標準門市</h3><p>適合希望降低新人訓練成本、提升日常出杯一致性的飲品店。</p></article>
+        <article class="scene reveal is-visible"><h3>高杯量門市</h3><p>適合尖峰時段排隊明顯、熱門品項消耗快速的營運場域。</p></article>
+        <article class="scene reveal is-visible"><h3>連鎖品牌</h3><p>適合需要統一配方、控管權限、追蹤設備資料與複製展店流程的品牌總部。</p></article>
+        <article class="scene reveal is-visible"><h3>小型櫃位</h3><p>適合空間有限，但仍希望導入智能出杯與標準化流程的吧台場景。</p></article>
+      </div>
+    </section>
+
+    <section id="process" class="section">
+      <div class="section-head reveal is-visible">
+        <div>
+          <p class="kicker">&nbsp; Implementation</p>
+          <h2>選型到驗收&nbsp;</h2><h2>建立導入流程</h2>
+        </div>
+        <p class="section-copy">設備導入前，會依據門市空間、每日杯量、菜單結構與現場條件進行評估，確保安裝、訓練與營運銜接完整。</p>
+      </div>
+      <div class="process">
+        <article class="step reveal is-visible"><h3>需求訪談</h3><p>了解門市空間、每日杯量、菜單結構與導入目標。</p></article>
+        <article class="step reveal is-visible"><h3>機型建議</h3><p>依照品項數、熱門原料、補料頻率與吧台空間推薦合適機型。</p></article>
+        <article class="step reveal is-visible"><h3>現場確認</h3><p>確認尺寸、電力、供水、排水、網路與搬運條件。</p></article>
+        <article class="step reveal is-visible"><h3>方案確認</h3><p>確認設備配置、服務內容、保固條件、交期與導入安排。</p></article>
+        <article class="step reveal is-visible"><h3>出貨安裝</h3><p>完成設備定位、接線、進排水、網路與基礎功能測試。</p></article>
+        <article class="step reveal is-visible"><h3>教育訓練</h3><p>培訓開機、補料、清洗、校準與日常異常處理。</p></article>
+        <article class="step reveal is-visible"><h3>驗收追蹤</h3><p>確認出杯穩定性、配方設定與後續服務窗口。</p></article>
+      </div>
+    </section>
+
+    <section id="specs" class="section">
+      <div class="section-head reveal is-visible">
+        <div>
+          <p class="kicker">&nbsp; Specifications</p>
+          <h2>主要規格摘要</h2>
+        </div>
+        <p class="section-copy">完整規格、配置建議與專案條件，建議於需求訪談後提供。</p>
+      </div>
+      <div class="spec-wrap">
+        <div class="spec reveal is-visible"><b>大型機尺寸</b><span>1500 × 700 × 1480 mm</span></div>
+        <div class="spec reveal is-visible"><b>中型機尺寸</b><span>600 × 700 × 1430 mm</span></div>
+        <div class="spec reveal is-visible"><b>螢幕尺寸</b><span>10.1 吋</span></div>
+        <div class="spec reveal is-visible"><b>作業系統</b><span>Android 7.1</span></div>
+        <div class="spec reveal is-visible"><b>出料精度</b><span>100ml±2%</span></div>
+        <div class="spec reveal is-visible"><b>額定功率</b><span>大型機 1100W / 中型機 610W</span></div>
+        <div class="spec reveal is-visible"><b>冷媒型號</b><span>R290</span></div>
+        <div class="spec reveal is-visible"><b>果糖桶容量</b><span>5.5L × 2</span></div>
+        <div class="spec reveal is-visible"><b>檯面材質</b><span>304 不鏽鋼</span></div>
+        <div class="spec reveal is-visible"><b>RO 自動補水</b><span>可選裝</span></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faq-title">
+      <div class="section-head reveal is-visible">
+        <div>
+          <p class="kicker">&nbsp; Questions</p>
+          <h2 id="faq-title">常見問題</h2>
+        </div>
+        <p class="section-copy"><br></p>
+      </div>
+      <div class="faq">
+        <article class="faq-item reveal is-visible"><h3>適合哪類門市？</h3><p>適合飲品店、連鎖品牌、高杯量門市、小型櫃位、調酒、吃到飽、開放式餐飲場所與希望建立標準化出杯流程的營運場域。</p></article>
+        <article class="faq-item reveal is-visible"><h3>是否可以管理不同飲品配方？</h3><p>可以。後台可建立杯型、糖量、冰塊與配方設定，並支援不同設備與門市管理。</p></article>
+        <article class="faq-item reveal is-visible"><h3>設備是否會提醒缺料？</h3><p>可於設備端進行缺料提醒，協助門市人員即時補料。</p></article>
+        <article class="faq-item reveal is-visible"><h3>是否適合連鎖展店？</h3><p>適合。PHOENIXES 支援後台權限控管、設備資料管理與配方標準化，便於多門市複製。</p></article>
+        <article class="faq-item reveal is-visible"><h3>如何取得報價？</h3><p>PHOENIXES 依機型、導入條件與服務內容提供專案報價，建議先完成需求確認與選型評估。</p></article>
+        <article class="faq-item reveal is-visible"><h3>導入前是否需要場勘？</h3><p>建議進行。設備導入前需確認空間、電力、供水、排水、網路與搬運條件。</p></article>
+      </div>
+    </section>
+
+    <section id="contact" class="cta">
+      <div class="cta-inner reveal is-visible">
+        <p class="kicker">Private Consultation</p>
+        <h2>為你的門市選擇&nbsp;</h2><h2>智能調飲方案</h2>
+        <p>每一間門市的空間、杯量、品項與營運節奏都不同。PHOENIXES 將依據你的實際需求，協助評估合適機型與導入方式。</p>
+        <div class="cta-actions">
+          <a class="button light" href="#">預約產品展示</a>
+          <a class="button ghost" href="#">取得選型建議</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>PHOENIXES 智能奶茶機</span>
+    <span>聯絡方式待補｜售價採專案報價</span>
+  </footer>
+  <script>
+    (() => {
+      const nav = document.querySelector(".nav");
+      const hero = document.querySelector(".hero");
+      const revealTargets = document.querySelectorAll(
+        ".section-head, .value-card, .model-stage, .model-card, .image-frame, .detail-card, .scene, .step, .spec, .faq-item, .cta-inner"
+      );
+
+      revealTargets.forEach((node) => node.classList.add("reveal"));
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16, rootMargin: "0px 0px -7% 0px" });
+
+      revealTargets.forEach((node) => revealObserver.observe(node));
+
+      const setNavState = () => {
+        nav.classList.toggle("is-scrolled", window.scrollY > 80);
+        if (hero) {
+          hero.style.setProperty("--scroll", Math.min(window.scrollY / 800, 1).toFixed(3));
+        }
+      };
+
+      setNavState();
+      window.addEventListener("scroll", setNavState, { passive: true });
+
+      const cards = Array.from(document.querySelectorAll(".model-card"));
+      const stageVisual = document.querySelector(".stage-visual");
+      const stage = {
+        image: document.getElementById("stageImage"),
+        code: document.getElementById("stageCode"),
+        label: document.getElementById("stageLabel"),
+        title: document.getElementById("stageTitle"),
+        text: document.getElementById("stageText"),
+        specOne: document.getElementById("stageSpecOne"),
+        specTwo: document.getElementById("stageSpecTwo")
+      };
+      const specLabels = document.querySelectorAll(".stage-specs span");
+
+      const activateModel = (card) => {
+        if (!stage.image) return;
+        if (!card || card.classList.contains("is-active")) return;
+        cards.forEach((item) => item.classList.toggle("is-active", item === card));
+
+        stage.image.classList.add("switching");
+        window.setTimeout(() => {
+          stage.image.src = card.dataset.image;
+          stage.image.alt = `PHOENIXES ${card.dataset.code} 智能奶茶機展示`;
+          if (stageVisual) {
+            stageVisual.dataset.activeCode = card.dataset.code;
+          }
+          stage.code.textContent = card.dataset.code;
+          stage.label.textContent = card.dataset.label;
+          stage.title.textContent = card.dataset.title;
+          stage.text.textContent = card.dataset.text;
+          stage.specOne.textContent = card.dataset.specOne;
+          stage.specTwo.textContent = card.dataset.specTwo;
+          specLabels[0].lastChild.textContent = card.dataset.specOneLabel;
+          specLabels[1].lastChild.textContent = card.dataset.specTwoLabel;
+          stage.image.classList.remove("switching");
+        }, 180);
+      };
+
+      if (stage.image) {
+        cards.forEach((card) => {
+          card.setAttribute("tabindex", "0");
+          card.setAttribute("role", "button");
+          card.addEventListener("mouseenter", () => activateModel(card));
+          card.addEventListener("click", () => activateModel(card));
+          card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              activateModel(card);
+            }
+          });
+        });
+      }
+
+      const detailImages = Array.from(document.querySelectorAll(".cinema-visual img"));
+      const detailDots = Array.from(document.querySelectorAll(".cinema-dot"));
+      const detailSteps = Array.from(document.querySelectorAll(".cinema-step"));
+
+      const activateDetail = (index) => {
+        detailImages.forEach((image, imageIndex) => {
+          image.classList.toggle("is-active", imageIndex === index);
+        });
+        detailDots.forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === index);
+        });
+      };
+
+      if (detailSteps.length) {
+        const detailObserver = new IntersectionObserver((entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+          if (visible) {
+            activateDetail(Number(visible.target.dataset.detailStep));
+          }
+        }, { threshold: [0.28, 0.45, 0.62], rootMargin: "-18% 0px -18% 0px" });
+
+        detailSteps.forEach((step) => detailObserver.observe(step));
+      }
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
